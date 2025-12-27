@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import React, { useState, useEffect } from "react"
+import Link from "next/link"
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false)
@@ -51,7 +52,11 @@ export function Navbar() {
             </a>
           </nav>
 
-          <Button className="bg-cyan-400 text-slate-950 hover:bg-cyan-300 font-semibold">Request Security Audit</Button>
+          <Link href="/#contact">
+            <Button className="bg-cyan-400 text-slate-950 hover:bg-cyan-300 font-semibold">
+              Contact Us
+            </Button>
+          </Link>
         </div>
       </div>
     </header>
