@@ -10,7 +10,7 @@ interface ServiceCardProps {
 
 export function ServiceCard({ title, description, icon: Icon, features }: ServiceCardProps) {
   return (
-    <Card className="bg-slate-900 border-slate-800 p-6 hover:bg-slate-800 transition-colors">
+    <Card className="bg-slate-900 border-slate-800 p-6 hover:bg-slate-800 shadow-md hover:shadow-xl transition-all transform hover:-translate-y-1">
       <div className="flex items-start gap-4">
         <div className="w-12 h-12 rounded-lg bg-cyan-400/20 flex items-center justify-center flex-shrink-0">
           <Icon className="w-6 h-6 text-cyan-400" />

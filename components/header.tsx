@@ -1,11 +1,15 @@
 "use client"
 
-import { ShieldCheck } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { useState, useEffect } from "react"
+import React, { useState, useEffect } from "react"
 
 export function Header() {
   const [scrolled, setScrolled] = useState(false)
+
+  const handleHomeClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault()
+    window.scrollTo({ top: 0, behavior: "smooth" })
+  }
 
   useEffect(() => {
     const handleScroll = () => {
@@ -24,19 +28,23 @@ export function Header() {
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <ShieldCheck className="w-8 h-8 text-cyan-400" />
+            <img src="/images/logo.svg" alt="CodeTech Logo" className="w-8 h-8" />
             <span className="text-2xl font-bold text-white">CodeTech</span>
           </div>
 
           <nav className="hidden md:flex items-center gap-8">
-            <a href="#home" className="text-slate-300 hover:text-cyan-400 transition-colors">
+            <a
+              href="#home"
+              onClick={handleHomeClick}
+              className="text-slate-300 hover:text-cyan-400 transition-colors"
+            >
               Home
             </a>
             <a href="#services" className="text-slate-300 hover:text-cyan-400 transition-colors">
               Services
             </a>
-            <a href="#security" className="text-slate-300 hover:text-cyan-400 transition-colors">
-              Security
+            <a href="/projects" className="text-slate-300 hover:text-cyan-400 transition-colors">
+              Projects
             </a>
             <a href="#about" className="text-slate-300 hover:text-cyan-400 transition-colors">
               About

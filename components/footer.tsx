@@ -5,9 +5,12 @@ export function Footer() {
     <footer className="bg-slate-900 border-t border-slate-800 py-12">
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-          <p className="text-slate-400 text-center md:text-left">
-            Copyright © 2025 CodeTech Digital Solutions. All rights reserved.
-          </p>
+          <div className="flex items-center gap-3">
+            <img src="/images/logo.svg" alt="CodeTech Logo" className="w-6 h-6" />
+            <p className="text-slate-400 text-center md:text-left">
+              Copyright © 2025 <span className="text-white">CodeTech</span> Digital Solutions. All rights reserved.
+            </p>
+          </div>
 
           <div className="flex items-center gap-4">
             <a

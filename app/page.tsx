@@ -1,8 +1,10 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
 import { ServiceCard } from "@/components/ServiceCard";
+import { ServicesSection } from "@/components/ServicesSection";
 import { Shield, Lock, CheckCircle, Globe, Camera, Cpu, Headphones, ArrowRight, Phone, Mail, MapPin, Facebook, Twitter, Linkedin, Send } from "lucide-react";
 
 export default function Home() {
@@ -64,13 +66,19 @@ export default function Home() {
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-16">
-              <button className="bg-corporate-cyan text-corporate-blue px-8 py-4 rounded-xl font-bold text-lg hover:bg-white transition-all transform hover:scale-105 shadow-[0_0_30px_rgba(0,229,255,0.4)] flex items-center gap-2">
+              <Link
+                href="/#contact"
+                className="bg-corporate-cyan text-corporate-blue px-8 py-4 rounded-xl font-bold text-lg hover:bg-white transition-all transform hover:scale-105 shadow-[0_0_30px_rgba(0,229,255,0.4)] flex items-center gap-2"
+              >
                 Secure Your Consultation Now
                 <ArrowRight className="w-5 h-5" />
-              </button>
-              <button className="border border-white/20 hover:border-corporate-cyan/50 px-8 py-4 rounded-xl font-bold text-lg transition-all backdrop-blur-sm text-white">
+              </Link>
+              <a
+                href="#services"
+                className="border border-white/20 hover:border-corporate-cyan/50 px-8 py-4 rounded-xl font-bold text-lg transition-all backdrop-blur-sm text-white"
+              >
                 View Our Services
-              </button>
+              </a>
             </div>
 
             {/* Trust Badges */}
@@ -168,6 +176,8 @@ export default function Home() {
         </div>
       </section>
 
+      <ServicesSection />
+
       {/* Security Guarantee Section */}
       <section id="guarantee" className="py-24 relative overflow-hidden bg-corporate-slate">
         <div className="container mx-auto px-6">
@@ -208,7 +218,7 @@ export default function Home() {
                 >
                   <div className="w-64 h-64 border-2 border-dashed border-corporate-cyan/30 rounded-full flex items-center justify-center">
                     <div className="w-48 h-48 border border-corporate-cyan/50 rounded-full flex items-center justify-center">
-                      <Shield className="w-24 h-24 text-corporate-cyan shadow-[0_0_30px_rgba(0,229,255,0.2)]" />
+                      <img src="/images/logo.png" alt="CodeTech Logo" className="w-24 h-24" />
                     </div>
                   </div>
                 </motion.div>
@@ -226,9 +236,12 @@ export default function Home() {
               <div className="text-corporate-cyan font-bold tracking-[0.2em] uppercase text-sm mb-4">Case Studies</div>
               <h2 className="font-montserrat font-bold text-4xl md:text-5xl text-cyan-400">Secure Project Showcase</h2>
             </div>
-            <button className="text-corporate-cyan font-bold flex items-center gap-2 hover:translate-x-2 transition-transform">
+            <Link
+              href="/projects"
+              className="text-corporate-cyan font-bold flex items-center gap-2 hover:translate-x-2 transition-transform"
+            >
               Explore All Projects <ArrowRight className="w-5 h-5" />
-            </button>
+            </Link>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -236,19 +249,19 @@ export default function Home() {
               {
                 title: "Enterprise Network Setup",
                 category: "Infrastructure",
-                image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc51?auto=format&fit=crop&q=80&w=800",
+                image: "/images/projects/lansetup.jpeg",
                 stats: "99.9% Uptime"
               },
               {
                 title: "Commercial CCTV Installation",
                 category: "Physical Security",
-                image: "https://images.unsplash.com/photo-1557597774-9d2739f85a76?auto=format&fit=crop&q=80&w=800",
+                image: "/images/projects/camerainstall.jpeg",
                 stats: "4K HD Coverage"
               },
               {
-                title: "Website Security",
+                title: "Website Development & Design",
                 category: "Web Development",
-                image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&q=80&w=800",
+                image: "/images/webdev.jpeg",
                 stats: "Fraud Prevention"
               }
             ].map((project, i) => (
@@ -269,7 +282,7 @@ export default function Home() {
                   <div className="flex items-center justify-between opacity-0 group-hover:opacity-100 transition-opacity">
                     <span className="text-sm font-medium text-slate-400">{project.stats}</span>
                     <div className="w-10 h-10 border border-white/20 rounded-full flex items-center justify-center group-hover:bg-corporate-cyan group-hover:text-corporate-blue transition-all">
-                      <ArrowRight className="w-5 h-5" />
+                    <Link href="/contact" className="text-cyan-400 hover:text-cyan-300 transition-colors">View Project</Link>
                     </div>
                   </div>
                 </div>
@@ -301,13 +314,9 @@ export default function Home() {
 
           <div className="glass-morphism rounded-3xl p-12 text-center relative overflow-hidden">
             <div className="absolute inset-0 bg-corporate-cyan/5 -z-10" />
-            <h2 className="font-montserrat font-bold text-3xl md:text-5xl mb-8 text-cyan-400">Partner with a Team That<br />Prioritizes Your Safety</h2>
-            <button className="bg-corporate-cyan text-corporate-blue px-10 py-5 rounded-xl font-bold text-xl hover:bg-white transition-all shadow-[0_0_50px_rgba(0,229,255,0.3)] inline-flex items-center gap-3">
-              Secure Your Consultation Now
-              <Lock className="w-6 h-6" />
-            </button>
+             <h2 className="font-montserrat font-bold text-3xl md:text-5xl mb-8 text-cyan-400">Partner with a Team That<br />Prioritizes Your Safety</h2>
+            </div>
           </div>
-        </div>
       </section>
       {/* Contact Section */}
       <section id="contact" className="py-24 relative bg-corporate-dark text-white">
@@ -403,10 +412,10 @@ export default function Home() {
           <div className="flex flex-col md:flex-row justify-between items-center gap-8">
             <div className="flex items-center gap-2">
               <div className="bg-corporate-cyan p-1.5 rounded-lg">
-                <Shield className="w-5 h-5 text-corporate-blue" />
+                <img src="/images/logo.svg" alt="CodeTech Logo" className="w-5 h-5" />
               </div>
               <span className="font-montserrat font-bold text-lg tracking-tight">
-                CODETECH<span className="text-corporate-cyan">SOLUTIONS</span>
+                <span className="text-white">CODETECH</span><span className="text-corporate-cyan">SOLUTIONS</span>
               </span>
             </div>
             

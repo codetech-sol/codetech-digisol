@@ -10,6 +10,9 @@ export const metadata: Metadata = {
   description: "Zambia's leading provider for Secure Web Development, HD CCTV Systems, and Robust IT Networking.",
   keywords: ["Web Development Zambia", "CCTV Installation Lusaka", "IT Infrastructure", "Networking Consultation"],
   authors: [{ name: "CodeTech Digital Solutions" }],
+  icons: {
+    icon: "/images/fav.ico",
+  },
   openGraph: {
     title: "CodeTech Digital Solutions | Secure Technology",
     description: "Building and protecting your digital and physical infrastructure.",
