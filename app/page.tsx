@@ -5,7 +5,10 @@ import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
 import { ServiceCard } from "@/components/ServiceCard";
 import { ServicesSection } from "@/components/ServicesSection";
-import { Shield, Lock, CheckCircle, Globe, Camera, Cpu, Headphones, ArrowRight, Phone, Mail, MapPin, Facebook, Twitter, Linkedin, Send } from "lucide-react";
+import { 
+  Shield, Lock, CheckCircle, Globe, Camera, Cpu, Headphones, 
+  ArrowRight, Phone, Mail, MapPin, Send 
+} from "lucide-react";
 
 export default function Home() {
   const services = [
@@ -52,10 +55,12 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <div className="inline-flex items-center gap-2 bg-corporate-blue/50 border border-corporate-cyan/30 px-4 py-2 rounded-full text-corporate-cyan text-sm mb-6 backdrop-blur-sm">
-              <Shield className="w-4 h-4" />
-              <span>Certified Security & IT Infrastructure Experts</span>
+            {/* --- STATIC GLOWING BADGE START --- */}
+            {/* Removed animate-ping. Enhanced shadow and border for static glow. */}
+            <div className="inline-flex items-center gap-2 bg-corporate-blue/80 border border-cyan-400 px-6 py-2.5 rounded-full text-cyan-400 text-lg font-bold backdrop-blur-md shadow-[0_0_25px_rgba(34,211,238,0.6)] mb-8">
+              <span>CODETECH DIGITAL SOLUTIONS</span>
             </div>
+            {/* --- STATIC GLOWING BADGE END --- */}
             
             <h1 className="font-montserrat font-extrabold text-5xl md:text-7xl mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white via-corporate-cyan to-white tracking-tight leading-tight">
               Securing Your Digital <br />& Physical World
@@ -317,6 +322,7 @@ export default function Home() {
             </div>
           </div>
       </section>
+
       {/* Contact Section */}
       <section id="contact" className="py-24 relative bg-corporate-dark text-white">
         <div className="container mx-auto px-6">
