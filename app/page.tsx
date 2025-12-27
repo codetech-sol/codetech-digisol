@@ -282,7 +282,6 @@ export default function Home() {
                   <div className="flex items-center justify-between opacity-0 group-hover:opacity-100 transition-opacity">
                     <span className="text-sm font-medium text-slate-400">{project.stats}</span>
                     <div className="w-10 h-10 border border-white/20 rounded-full flex items-center justify-center group-hover:bg-corporate-cyan group-hover:text-corporate-blue transition-all">
-                    <Link href="/contact" className="text-cyan-400 hover:text-cyan-300 transition-colors">View Project</Link>
                     </div>
                   </div>
                 </div>
