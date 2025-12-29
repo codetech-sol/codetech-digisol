@@ -421,8 +421,7 @@ export default function Home() {
                   </div>
                   <div>
                     <div className="font-bold mb-1 text-cyan-400">Secure Email</div>
-                    <div className="text-slate-400">raphealphiridrumz@gmail.com</div>
-                    <div className="text-slate-400">dezignbluprint.tech@gmail.com</div>
+                    <div className="text-slate-400">codetechdigitalsolutions@gmail.com</div>
                   </div>
                 </div>
                 <div className="flex items-start gap-6">
