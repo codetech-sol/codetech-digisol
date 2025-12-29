@@ -1,10 +1,12 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
 import { ServiceCard } from "@/components/ServiceCard";
 import { ServicesSection } from "@/components/ServicesSection";
+
 import { 
   Shield, Lock, CheckCircle, Globe, Camera, Cpu, Headphones, 
   ArrowRight, Phone, Mail, MapPin, Send 
@@ -28,7 +30,17 @@ export default function Home() {
       title: "IT Infrastructure",
       description: "Robust network installation and systems management focusing on maximum uptime and system integrity.",
       icon: Cpu,
-      features: ["Network Configuration", "Hardware Maintenance", "System Backups"]
+      features: [
+        "Network configuration",
+        "Hardware maintenance",
+        "System backups",
+        "Network design and IP addressing schemes",
+        "Configuration and troubleshooting of routers and switches",
+        "Deployment and management of controller-based wireless access points",
+        "Implementation of firewall security policies",
+        "VLANs, VRFs, routing protocols, QoS", 
+        "Secure network segmentation for scalable wired and wireless environments"
+      ]
     },
     {
       title: "Support & Training",
@@ -37,6 +49,64 @@ export default function Home() {
       features: ["Remote Assistance", "Staff Training", "On-site Maintenance"]
     }
   ];
+
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [service, setService] = useState("");
+  const [message, setMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setStatus("idle");
+    setErrorMessage(null);
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: fullName,
+          email,
+          service,
+          message,
+        }),
+      });
+
+      if (!response.ok) {
+        let errorText = "Failed to send message. Please try again.";
+
+        try {
+          const data = await response.json();
+          if (data && typeof data.error === "string") {
+            errorText = data.error;
+          }
+        } catch {
+          // ignore JSON parsing error and use default message
+        }
+
+        setStatus("error");
+        setErrorMessage(errorText);
+        return;
+      }
+
+      setStatus("success");
+      setFullName("");
+      setEmail("");
+      setService("");
+      setMessage("");
+    } catch {
+      setStatus("error");
+      setErrorMessage("Network error. Please check your connection and try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
 
   return (
     <main className="min-h-screen">
@@ -376,34 +446,81 @@ export default function Home() {
                   </div>
                 </div>
                 
-                <form className="space-y-6">
+                <form className="space-y-6" onSubmit={handleSubmit}>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <label className="text-xs font-bold uppercase tracking-widest text-slate-500">Full Name</label>
-                      <input type="text" className="w-full bg-corporate-blue/20 border border-white/20 rounded-xl px-4 py-3 focus:border-corporate-cyan outline-none transition-colors text-white placeholder:text-slate-500" placeholder="Your full name" />
+                      <input
+                        type="text"
+                        className="w-full bg-corporate-blue/20 border border-white/20 rounded-xl px-4 py-3 focus:border-corporate-cyan outline-none transition-colors text-white placeholder:text-slate-500"
+                        placeholder="Your full name"
+                        value={fullName}
+                        onChange={(event) => setFullName(event.target.value)}
+                        required
+                      />
                     </div>
                     <div className="space-y-2">
                       <label className="text-xs font-bold uppercase tracking-widest text-slate-500">Email Address</label>
-                      <input type="email" className="w-full bg-corporate-blue/20 border border-white/20 rounded-xl px-4 py-3 focus:border-corporate-cyan outline-none transition-colors text-white placeholder:text-slate-500" placeholder="" />
+                      <input
+                        type="email"
+                        className="w-full bg-corporate-blue/20 border border-white/20 rounded-xl px-4 py-3 focus:border-corporate-cyan outline-none transition-colors text-white placeholder:text-slate-500"
+                        placeholder="you@example.com"
+                        value={email}
+                        onChange={(event) => setEmail(event.target.value)}
+                        required
+                      />
                     </div>
                   </div>
                   <div className="space-y-2">
                     <label className="text-xs font-bold uppercase tracking-widest text-slate-500">Service Required</label>
-                    <select className="w-full bg-corporate-blue/20 border border-white/20 rounded-xl px-4 py-3 focus:border-corporate-cyan outline-none transition-colors appearance-none text-white">
-                      <option className="bg-corporate-dark text-white">Select a service</option>
-                      <option className="bg-corporate-dark text-white">Web Development</option>
-                      <option className="bg-corporate-dark text-white">CCTV Installation</option>
-                      <option className="bg-corporate-dark text-white">IT Management</option>
+                    <select
+                      className="w-full bg-corporate-blue/20 border border-white/20 rounded-xl px-4 py-3 focus:border-corporate-cyan outline-none transition-colors appearance-none text-white"
+                      value={service}
+                      onChange={(event) => setService(event.target.value)}
+                    >
+                      <option className="bg-corporate-dark text-white" value="">
+                        Select a service
+                      </option>
+                      <option className="bg-corporate-dark text-white" value="Web Development">
+                        Web Development
+                      </option>
+                      <option className="bg-corporate-dark text-white" value="CCTV Installation">
+                        CCTV Installation
+                      </option>
+                      <option className="bg-corporate-dark text-white" value="IT Management">
+                        IT Management
+                      </option>
                     </select>
                   </div>
                   <div className="space-y-2">
                     <label className="text-xs font-bold uppercase tracking-widest text-slate-500">Message</label>
-                    <textarea rows={4} className="w-full bg-corporate-blue/20 border border-white/20 rounded-xl px-4 py-3 focus:border-corporate-cyan outline-none transition-colors text-white placeholder:text-slate-500" placeholder="How can we help birth your ideas for you?"></textarea>
+                    <textarea
+                      rows={4}
+                      className="w-full bg-corporate-blue/20 border border-white/20 rounded-xl px-4 py-3 focus:border-corporate-cyan outline-none transition-colors text-white placeholder:text-slate-500"
+                      placeholder="How can we help birth your ideas for you?"
+                      value={message}
+                      onChange={(event) => setMessage(event.target.value)}
+                      required
+                    ></textarea>
                   </div>
-                  <button className="w-full bg-corporate-cyan text-corporate-blue font-bold py-4 rounded-xl hover:bg-white transition-all shadow-[0_0_30px_rgba(0,229,255,0.2)] flex items-center justify-center gap-2">
+                  <button
+                    type="submit"
+                    className="w-full bg-corporate-cyan text-corporate-blue font-bold py-4 rounded-xl hover:bg-white transition-all shadow-[0_0_30px_rgba(0,229,255,0.2)] flex items-center justify-center gap-2"
+                    disabled={isSubmitting}
+                  >
                     <Send className="w-5 h-5" />
-                    Send Message
+                    {isSubmitting ? "Sending..." : "Send Message"}
                   </button>
+                  {status === "success" && (
+                    <p className="text-sm text-emerald-400 text-center">
+                      Message sent successfully. We will get back to you shortly.
+                    </p>
+                  )}
+                  {status === "error" && errorMessage && (
+                    <p className="text-sm text-red-400 text-center">
+                      {errorMessage}
+                    </p>
+                  )}
                 </form>
               </div>
             </div>
