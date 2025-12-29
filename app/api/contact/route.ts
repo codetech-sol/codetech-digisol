@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
+import { z } from "zod";
 
 const apiKey = process.env.RESEND_API_KEY;
 const resend = apiKey ? new Resend(apiKey) : null;
@@ -10,8 +11,62 @@ const FROM_ADDRESS =
 
 const TO_ADDRESS = "codetechdigitalsolutions@gmail.com";
 
+// 1. Rate Limiting Map
+const rateLimitMap = new Map<string, { count: number; lastReset: number }>();
+
+function isRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const window = 60 * 1000; // 1 minute
+  const limit = 3;
+
+  const record = rateLimitMap.get(ip) || { count: 0, lastReset: now };
+
+  if (now - record.lastReset > window) {
+    record.count = 0;
+    record.lastReset = now;
+  }
+
+  if (record.count >= limit) return true;
+
+  record.count++;
+  rateLimitMap.set(ip, record);
+  return false;
+}
+
+// 2. HTML Sanitization
+function escapeHtml(text: string): string {
+  if (!text) return "";
+  return text.replace(/[&<>"']/g, (char) => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#039;"
+  })[char] || char);
+}
+
+// 3. Validation Schema
+const contactSchema = z.object({
+  name: z.string().min(2).max(100).trim(),
+  email: z.string().email().max(255),
+  service: z.string().max(100).optional(),
+  message: z.string().min(10).max(2000).trim(),
+  honeypot: z.string().optional()
+});
+
 export async function POST(req: NextRequest) {
   try {
+    // Rate limiting check
+    const ip = req.headers.get("x-forwarded-for") || req.headers.get("x-real-ip") || "unknown";
+
+    if (isRateLimited(ip)) {
+      return NextResponse.json(
+        { error: "Too many requests. Please try again later." },
+        { status: 429 }
+      );
+    }
+
+    // Check if Resend is configured
     if (!resend) {
       console.error("Resend client not initialized (missing API key).");
       return NextResponse.json(
@@ -21,42 +76,29 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
-    const { name, email, service, message } = body ?? {};
 
-    // ----------------------------
-    // Validation
-    // ----------------------------
-    if (!name || !email || !message) {
+    // Honeypot trap - silently reject bots
+    if (body.honeypot) {
+      return NextResponse.json({ success: true }, { status: 200 });
+    }
+
+    // Validate input with Zod
+    const result = contactSchema.safeParse(body);
+
+    if (!result.success) {
       return NextResponse.json(
-        {
-          error:
-            "Missing required fields: name, email, and message are required.",
-        },
+        { error: "Invalid input. Please check your form fields." },
         { status: 400 }
       );
     }
 
-    if (typeof email !== "string" || !email.includes("@")) {
-      return NextResponse.json(
-        { error: "Please provide a valid email address." },
-        { status: 400 }
-      );
-    }
+    const { name, email, service, message } = result.data;
 
-    if (typeof message !== "string" || !message.trim()) {
-      return NextResponse.json(
-        { error: "Message cannot be empty." },
-        { status: 400 }
-      );
-    }
-
-    // Prevent header injection
+    // Prevent header injection (additional security)
     const safeEmail = email.replace(/[\r\n]/g, "");
 
-    // ----------------------------
-    // Email content
-    // ----------------------------
-    const subject = `New Contact Form Submission from ${name}`;
+    // Email content with sanitized HTML
+    const subject = `New Contact Form Submission from ${escapeHtml(name)}`;
 
     const text = [
       "You have received a new message from the CodeTech Digital Solutions contact form.",
@@ -74,21 +116,19 @@ export async function POST(req: NextRequest) {
         <h2>New Contact Form Submission</h2>
         <p>You have received a new message from the CodeTech Digital Solutions website.</p>
         <hr />
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${safeEmail}</p>
-        <p><strong>Service:</strong> ${service || "(not specified)"}</p>
+        <p><strong>Name:</strong> ${escapeHtml(name)}</p>
+        <p><strong>Email:</strong> ${escapeHtml(safeEmail)}</p>
+        <p><strong>Service:</strong> ${escapeHtml(service || "(not specified)")}</p>
         <h3>Message</h3>
-        <p>${message.replace(/\n/g, "<br/>")}</p>
+        <p>${escapeHtml(message).replace(/\n/g, "<br/>")}</p>
       </div>
     `;
 
-    // ----------------------------
     // Send email
-    // ----------------------------
     const { error } = await resend.emails.send({
       from: FROM_ADDRESS,
       to: TO_ADDRESS,
-      replyTo: safeEmail, // ✅ Correct Resend field
+      replyTo: safeEmail,
       subject,
       text,
       html,

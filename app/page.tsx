@@ -7,9 +7,9 @@ import { Navbar } from "@/components/Navbar";
 import { ServiceCard } from "@/components/ServiceCard";
 import { ServicesSection } from "@/components/ServicesSection";
 
-import { 
-  Shield, Lock, CheckCircle, Globe, Camera, Cpu, Headphones, 
-  ArrowRight, Phone, Mail, MapPin, Send 
+import {
+  Shield, Lock, CheckCircle, Globe, Camera, Cpu, Headphones,
+  ArrowRight, Phone, Mail, MapPin, Send
 } from "lucide-react";
 
 export default function Home() {
@@ -38,7 +38,7 @@ export default function Home() {
         "Configuration and troubleshooting of routers and switches",
         "Deployment and management of controller-based wireless access points",
         "Implementation of firewall security policies",
-        "VLANs, VRFs, routing protocols, QoS", 
+        "VLANs, VRFs, routing protocols, QoS",
         "Secure network segmentation for scalable wired and wireless environments"
       ]
     },
@@ -54,6 +54,7 @@ export default function Home() {
   const [email, setEmail] = useState("");
   const [service, setService] = useState("");
   const [message, setMessage] = useState("");
+  const [honeypot, setHoneypot] = useState(""); // Bot trap
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -75,6 +76,7 @@ export default function Home() {
           email,
           service,
           message,
+          honeypot,
         }),
       });
 
@@ -115,7 +117,7 @@ export default function Home() {
       {/* Hero Section */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden cyber-grid pt-20">
         <div className="absolute inset-0 bg-gradient-to-b from-corporate-dark/50 via-corporate-dark to-corporate-dark" />
-        
+
         {/* Animated Background Elements */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-corporate-cyan/10 rounded-full blur-[120px] animate-pulse" />
 
@@ -131,11 +133,11 @@ export default function Home() {
               <span>CODETECH DIGITAL SOLUTIONS</span>
             </div>
             {/* --- STATIC GLOWING BADGE END --- */}
-            
+
             <h1 className="font-montserrat font-extrabold text-5xl md:text-7xl mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white via-corporate-cyan to-white tracking-tight leading-tight">
               Securing Your Digital <br />& Physical World
             </h1>
-            
+
             <p className="text-xl md:text-2xl text-slate-400 mb-10 max-w-3xl mx-auto leading-relaxed">
               From responsive web development to high-definition CCTV systems—we build and protect your infrastructure with surgical precision.
             </p>
@@ -179,7 +181,7 @@ export default function Home() {
       <section id="about" className="py-24 relative overflow-hidden bg-corporate-dark text-white">
         <div className="container mx-auto px-6">
           <div className="flex flex-col lg:flex-row items-center gap-16">
-            <motion.div 
+            <motion.div
               className="lg:w-1/2"
               initial={{ opacity: 0, x: -50 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -192,7 +194,7 @@ export default function Home() {
               </h2>
               <div className="space-y-6 text-slate-400 text-lg leading-relaxed">
                 <p>
-                  At <span className="text-white font-semibold">CodeTech Digital Solutions</span>, we create easy-to-use, beautiful, and sustainable digital solutions with a security-first approach. 
+                  At <span className="text-white font-semibold">CodeTech Digital Solutions</span>, we create easy-to-use, beautiful, and sustainable digital solutions with a security-first approach.
                 </p>
                 <p>
                   Our mission is to bridge the gap between high-level IT maintenance and physical security hardware. Whether it's "Computer Systems Management" or "Networking Consultation," our technical rigor ensures your data and premises remain secured.
@@ -209,8 +211,8 @@ export default function Home() {
                 </div>
               </div>
             </motion.div>
-            
-            <motion.div 
+
+            <motion.div
               className="lg:w-1/2 relative"
               initial={{ opacity: 0, scale: 0.8 }}
               whileInView={{ opacity: 1, scale: 1 }}
@@ -258,7 +260,7 @@ export default function Home() {
         <div className="container mx-auto px-6">
           <div className="glass-morphism rounded-[3rem] p-12 md:p-20 relative overflow-hidden">
             <div className="absolute top-0 right-0 w-96 h-96 bg-corporate-cyan/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-            
+
             <div className="flex flex-col lg:flex-row items-center gap-12 relative z-10">
               <div className="lg:w-2/3">
                 <div className="flex items-center gap-4 mb-6">
@@ -286,7 +288,7 @@ export default function Home() {
                 </div>
               </div>
               <div className="lg:w-1/3 flex justify-center">
-                <motion.div 
+                <motion.div
                   className="relative"
                   animate={{ rotate: 360 }}
                   transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
@@ -345,12 +347,12 @@ export default function Home() {
                 whileHover={{ y: -10 }}
                 className="group relative overflow-hidden rounded-2xl aspect-[4/5] bg-corporate-slate"
               >
-                <div 
+                <div
                   className="absolute inset-0 bg-cover bg-center group-hover:scale-110 transition-transform duration-700 opacity-50"
                   style={{ backgroundImage: `url(${project.image})` }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-corporate-dark via-corporate-dark/20 to-transparent" />
-                
+
                 <div className="absolute bottom-0 left-0 right-0 p-8 transform translate-y-4 group-hover:translate-y-0 transition-transform">
                   <div className="text-corporate-cyan text-xs font-bold uppercase tracking-widest mb-2">{project.category}</div>
                   <h3 className="text-2xl font-bold mb-4 text-cyan-400">{project.title}</h3>
@@ -388,9 +390,9 @@ export default function Home() {
 
           <div className="glass-morphism rounded-3xl p-12 text-center relative overflow-hidden">
             <div className="absolute inset-0 bg-corporate-cyan/5 -z-10" />
-             <h2 className="font-montserrat font-bold text-3xl md:text-5xl mb-8 text-cyan-400">Partner with a Team That<br />Prioritizes Your Safety</h2>
-            </div>
+            <h2 className="font-montserrat font-bold text-3xl md:text-5xl mb-8 text-cyan-400">Partner with a Team That<br />Prioritizes Your Safety</h2>
           </div>
+        </div>
       </section>
 
       {/* Contact Section */}
@@ -403,7 +405,7 @@ export default function Home() {
               <p className="text-slate-400 text-lg mb-12 leading-relaxed">
                 Have a project? Reach out through our channel. Our experts are standing by to deliver your interests.
               </p>
-              
+
               <div className="space-y-8">
                 <div className="flex items-start gap-6">
                   <div className="w-12 h-12 glass-morphism rounded-xl flex items-center justify-center shrink-0">
@@ -444,7 +446,7 @@ export default function Home() {
                     Reach Out...
                   </div>
                 </div>
-                
+
                 <form className="space-y-6" onSubmit={handleSubmit}>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
@@ -502,6 +504,17 @@ export default function Home() {
                       required
                     ></textarea>
                   </div>
+                  {/* Honeypot field - hidden from real users */}
+                  <input
+                    type="text"
+                    name="honeypot"
+                    value={honeypot}
+                    onChange={(e) => setHoneypot(e.target.value)}
+                    style={{ display: 'none' }}
+                    tabIndex={-1}
+                    autoComplete="off"
+                    aria-hidden="true"
+                  />
                   <button
                     type="submit"
                     className="w-full bg-corporate-cyan text-corporate-blue font-bold py-4 rounded-xl hover:bg-white transition-all shadow-[0_0_30px_rgba(0,229,255,0.2)] flex items-center justify-center gap-2"
@@ -539,7 +552,7 @@ export default function Home() {
                 <span className="text-white">CODETECH</span><span className="text-corporate-cyan">SOLUTIONS</span>
               </span>
             </div>
-            
+
             {/*<div className="flex gap-8">
               <Facebook className="w-5 h-5 text-slate-500 hover:text-corporate-cyan cursor-pointer transition-colors" />
               <Twitter className="w-5 h-5 text-slate-500 hover:text-corporate-cyan cursor-pointer transition-colors" />
