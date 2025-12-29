@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const apiKey = process.env.RESEND_API_KEY;
+const resend = apiKey ? new Resend(apiKey) : null;
 
 const FROM_ADDRESS =
   process.env.EMAIL_FROM_ADDRESS ||
@@ -11,8 +12,8 @@ const TO_ADDRESS = "codetechdigitalsolutions@gmail.com";
 
 export async function POST(req: NextRequest) {
   try {
-    if (!process.env.RESEND_API_KEY) {
-      console.error("RESEND_API_KEY is not configured.");
+    if (!resend) {
+      console.error("Resend client not initialized (missing API key).");
       return NextResponse.json(
         { error: "Email service is not configured. Please try again later." },
         { status: 500 }
