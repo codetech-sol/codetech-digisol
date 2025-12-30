@@ -2,8 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 import { z } from "zod";
 
+
+// Runtime validation: fail fast if required environment variables are missing
+if (!process.env.RESEND_API_KEY) {
+  throw new Error("Missing RESEND_API_KEY environment variable");
+}
+
 const apiKey = process.env.RESEND_API_KEY;
-const resend = apiKey ? new Resend(apiKey) : null;
+const resend = new Resend(apiKey);
 
 const FROM_ADDRESS =
   process.env.EMAIL_FROM_ADDRESS ||
@@ -63,15 +69,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json(
         { error: "Too many requests. Please try again later." },
         { status: 429 }
-      );
-    }
-
-    // Check if Resend is configured
-    if (!resend) {
-      console.error("Resend client not initialized (missing API key).");
-      return NextResponse.json(
-        { error: "Email service is not configured. Please try again later." },
-        { status: 500 }
       );
     }
 
@@ -135,7 +132,7 @@ export async function POST(req: NextRequest) {
     });
 
     if (error) {
-      console.error("Error sending contact email via Resend:", error);
+      console.error("Contact API - Email send failed:", error instanceof Error ? error.message : "Unknown email service error");
       return NextResponse.json(
         { error: "Failed to send message. Please try again later." },
         { status: 502 }
@@ -144,7 +141,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (err) {
-    console.error("Unexpected error in /api/contact:", err);
+    console.error("Contact API - Unexpected error:", err instanceof Error ? err.message : "Unknown internal error");
     return NextResponse.json(
       { error: "An unexpected error occurred. Please try again later." },
       { status: 500 }

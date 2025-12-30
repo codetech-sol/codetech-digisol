@@ -413,8 +413,8 @@ export default function Home() {
                   </div>
                   <div>
                     <div className="font-bold mb-1 text-cyan-400">Direct Lines</div>
-                    <div className="text-slate-400">+260 977 339452</div>
-                    <div className="text-slate-400">+260 772 302337</div>
+                    <div className="text-slate-400">+260 750 007 181 (WhatsApp)</div>
+                    <div className="text-slate-400">+260 772 302 337 (Telegram)</div>
                   </div>
                 </div>
                 <div className="flex items-start gap-6">
@@ -457,6 +457,7 @@ export default function Home() {
                         placeholder="Your full name"
                         value={fullName}
                         onChange={(event) => setFullName(event.target.value)}
+                        maxLength={100}
                         required
                       />
                     </div>
@@ -468,6 +469,7 @@ export default function Home() {
                         placeholder="you@example.com"
                         value={email}
                         onChange={(event) => setEmail(event.target.value)}
+                        maxLength={255}
                         required
                       />
                     </div>
@@ -501,6 +503,7 @@ export default function Home() {
                       placeholder="How can we help birth your ideas for you?"
                       value={message}
                       onChange={(event) => setMessage(event.target.value)}
+                      maxLength={2000}
                       required
                     ></textarea>
                   </div>
